@@ -7,8 +7,11 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] InputActionAsset InputActions;
     InputAction shoot;
 
+    // Shooting variables
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletSpeed = 100.0f;
+    Vector2 screenPos;
+    Vector3 mousePos;
 
     void OnEnable()
     {
@@ -29,9 +32,16 @@ public class PlayerShooting : MonoBehaviour
     {
         if (shoot.WasPerformedThisFrame())
         {
-            Debug.Log("Shooting!");
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<Rigidbody>().linearVelocity = Vector3.forward * bulletSpeed;
+            // Get the current position of the mouse cursor on the screen
+            screenPos = Mouse.current.position.ReadValue();
+            // Convert the screen position to world position based on the camera
+            Vector3 camDis = new Vector3(screenPos.x, screenPos.y, 5f);
+            mousePos = Camera.main.ScreenToWorldPoint(camDis);
+            // Creates the bullet prefab where the cursor is positioned
+            GameObject bullet = Instantiate(bulletPrefab, mousePos, Quaternion.identity);
+            // Makes the bullet move forward relative to where the cursor is pointing
+            bullet.GetComponent<Rigidbody>().linearVelocity = new Vector3(mousePos.normalized.x,
+                mousePos.normalized.y, mousePos.normalized.z * -1) * bulletSpeed;
         }
     }
 }
