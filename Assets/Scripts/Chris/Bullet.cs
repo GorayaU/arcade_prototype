@@ -12,8 +12,8 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Ensures the bullet destroys anything it touches other than the player and other projectiles
-        if (!other.gameObject.CompareTag("Player") && !other.gameObject.CompareTag("Bullet"))
+        // Ensures the bullet destroys any object with the tag "Enemy"
+        if (other.gameObject.CompareTag("Enemy"))
         {
             Destroy(other.gameObject);
         }
