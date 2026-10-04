@@ -30,11 +30,22 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
+        // Repeatedly calls the function to shoot after the attack input is performed
         if (shoot.WasPerformedThisFrame())
         {
-            // Shoots in the direction of the camera
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<Rigidbody>().linearVelocity = cameraTransform.forward * bulletSpeed;
+            InvokeRepeating("ShootProjectile", 0f, 0.5f);
         }
+        // After the attack input is released, the shoot function will stop being called
+        else if (shoot.WasReleasedThisFrame())
+        {
+            CancelInvoke();
+        }
+    }
+
+    void ShootProjectile()
+    {
+        // Shoots in the direction of the camera
+        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        bullet.GetComponent<Rigidbody>().linearVelocity = cameraTransform.forward * bulletSpeed;
     }
 }
