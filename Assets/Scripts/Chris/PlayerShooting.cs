@@ -14,6 +14,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletSpeed = 80.0f;
     [SerializeField] float fireRate = 0.35f;
+    bool attacking;
     [SerializeField] float reloadSpeed = 0.8f;
     bool reloading;
     [SerializeField] int maxAmmo = 12;
@@ -34,6 +35,7 @@ public class PlayerShooting : MonoBehaviour
     {
         shoot = InputSystem.actions.FindAction("Attack");
         reload = InputSystem.actions.FindAction("Reload");
+        attacking = false;
         reloading = false;
         currentAmmo = maxAmmo;
         cameraTransform = Camera.main.transform;
@@ -42,9 +44,11 @@ public class PlayerShooting : MonoBehaviour
     void Update()
     {
         // Repeatedly calls the function to shoot after the attack input is performed
-        if (shoot.WasPerformedThisFrame())
+        if (shoot.WasPerformedThisFrame() && !attacking)
         {
             InvokeRepeating("ShootProjectile", 0f, fireRate);
+            // Coroutine prevents the player from spamming the shoot input to fire faster
+            StartCoroutine(ShootWaitTime());
         }
         // After the attack input is released, the shoot function will stop being called
         else if (shoot.WasReleasedThisFrame())
@@ -70,6 +74,13 @@ public class PlayerShooting : MonoBehaviour
             currentAmmo--;
             Debug.Log(currentAmmo);
         }
+    }
+
+    IEnumerator ShootWaitTime()
+    {
+        attacking = true;
+        yield return new WaitForSeconds(fireRate);
+        attacking = false;
     }
 
     IEnumerator ReloadTimer()
