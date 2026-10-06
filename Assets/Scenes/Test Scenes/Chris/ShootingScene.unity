@@ -480,6 +480,9 @@ MonoBehaviour:
   InputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   bulletPrefab: {fileID: 115171059899714373, guid: 41d8ca41ef405be489470869ad2be8da, type: 3}
   bulletSpeed: 80
+  fireRate: 0.35
+  reloadSpeed: 0.8
+  maxAmmo: 12
 --- !u!1 &180233035
 GameObject:
   m_ObjectHideFlags: 0

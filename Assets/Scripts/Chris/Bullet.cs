@@ -4,6 +4,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] float bulletLifetime = 2f;
+    [SerializeField] float bulletDamage = 15f;
 
     void Awake()
     {
