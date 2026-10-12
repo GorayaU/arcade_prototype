@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] InputActionAsset InputActions;
     InputAction shoot;
     InputAction reload;
+    InputAction switchWeapon;
 
     // Shooting variables
     [Header("Shooting")]
@@ -17,9 +19,19 @@ public class PlayerShooting : MonoBehaviour
     bool attacking;
     [SerializeField] float reloadSpeed = 0.8f;
     bool reloading;
+    [SerializeField] float weaponDamage = 15f;
     [SerializeField] int maxAmmo = 12;
     int currentAmmo;
     Transform cameraTransform;
+
+    // Weapon switching variables
+    WeaponStats weapon1Data;
+    WeaponStats weapon2Data;
+    bool weapon1Equipped;
+
+    // UI variables
+    [Header("UI")]
+    [SerializeField] TextMeshProUGUI ammoText;
 
     void OnEnable()
     {
@@ -31,14 +43,28 @@ public class PlayerShooting : MonoBehaviour
         InputActions.FindActionMap("Player").Disable();
     }
 
+    public float GetWeaponDamage()
+    {
+        return weaponDamage;
+    }
+
     void Awake()
     {
         shoot = InputSystem.actions.FindAction("Attack");
         reload = InputSystem.actions.FindAction("Reload");
+        switchWeapon = InputSystem.actions.FindAction("Switch Weapon");
         attacking = false;
         reloading = false;
-        currentAmmo = maxAmmo;
         cameraTransform = Camera.main.transform;
+
+        // Assigning the player's weapons
+        weapon1Data = GetComponent<CurrentWeapon>().GetPistolData();
+        weapon2Data = GetComponent<CurrentWeapon>().GetARifleData();
+        SwitchWeapon(weapon1Data);
+        weapon1Equipped = true;
+
+        // Updating UI information
+        ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
     }
 
     void Update()
@@ -61,6 +87,25 @@ public class PlayerShooting : MonoBehaviour
         {
             StartCoroutine(ReloadTimer());
         }
+
+        if (switchWeapon.WasPerformedThisFrame())
+        {
+            // The current weapon will stop firing when switching
+            CancelInvoke();
+
+            if (weapon1Equipped)
+            {
+                SwitchWeapon(weapon2Data);
+                weapon1Equipped = false;
+            }
+            else
+            {
+                SwitchWeapon(weapon1Data);
+                weapon1Equipped = true;
+            }
+
+            ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
+        }
     }
 
     void ShootProjectile()
@@ -72,8 +117,17 @@ public class PlayerShooting : MonoBehaviour
             bullet.GetComponent<Rigidbody>().linearVelocity = cameraTransform.forward * bulletSpeed;
 
             currentAmmo--;
-            Debug.Log(currentAmmo);
+            ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
         }
+    }
+
+    void SwitchWeapon(WeaponStats newStats)
+    {
+        fireRate = newStats.fireRate;
+        reloadSpeed = newStats.reloadSpeed;
+        weaponDamage = newStats.damage;
+        maxAmmo = newStats.maxAmmo;
+        currentAmmo = maxAmmo;
     }
 
     IEnumerator ShootWaitTime()
@@ -88,7 +142,7 @@ public class PlayerShooting : MonoBehaviour
         reloading = true;
         yield return new WaitForSeconds(reloadSpeed);
         currentAmmo = maxAmmo;
-        Debug.Log(currentAmmo);
+        ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
         reloading = false;
     }
 }
