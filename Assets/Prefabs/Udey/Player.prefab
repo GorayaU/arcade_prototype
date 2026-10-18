@@ -148,7 +148,6 @@ GameObject:
   - component: {fileID: 7109966126699546370}
   - component: {fileID: 9209243976588989707}
   - component: {fileID: 2093692538522966641}
-  - component: {fileID: 5378624535591400598}
   - component: {fileID: 8580229983681104564}
   - component: {fileID: 2560390021577527627}
   - component: {fileID: 6135073799725677415}
@@ -179,6 +178,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7608054601810846868}
+  - {fileID: 6419663735333335259}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9209243976588989707
@@ -238,29 +238,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5378624535591400598
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4711752531879672386}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &8580229983681104564
 CharacterController:
   m_ObjectHideFlags: 0
@@ -388,7 +365,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 42a81eff60a7e964a8be8651d103c0b7, type: 2}
   startingIndex: 0
   aimOrigin: {fileID: 7608054601810846868}
-  ammo: {fileID: 0}
+  ammo: {fileID: 2496087293442919003}
   hitMask:
     serializedVersion: 2
     m_Bits: 768
@@ -409,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRig
   aimOrigin: {fileID: 7608054601810846868}
-  centreOfMass: {fileID: 0}
+  centreOfMass: {fileID: 6419663735333335259}
 --- !u!114 &9196633142087507418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,10 +424,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49c602409791f1f468314c7982bb5b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
-  cameraTransform: {fileID: 0}
+  cameraTransform: {fileID: 7608054601810846868}
   mouseSensitivity: 0.2
   gamepadSensitivity: 180
   invertY: 0
   minPitch: -85
   maxPitch: 85
   lockCursor: 1
+--- !u!1 &8702874272494517212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6419663735333335259}
+  m_Layer: 0
+  m_Name: Centre of Mass
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6419663735333335259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8702874272494517212}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7109966126699546370}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

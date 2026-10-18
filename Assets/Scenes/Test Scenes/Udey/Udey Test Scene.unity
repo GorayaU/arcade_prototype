@@ -469,8 +469,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 866.26, y: -448.8}
-  m_SizeDelta: {x: -1732.5186, y: -897.6061}
+  m_AnchoredPosition: {x: 839.82385, y: -441.93927}
+  m_SizeDelta: {x: -1679.646, y: -883.8846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &298873198
 MonoBehaviour:
@@ -606,8 +606,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 866.26, y: -350.3903}
-  m_SizeDelta: {x: -1732.5, y: -898.6305}
+  m_AnchoredPosition: {x: 839.58, y: -315.7737}
+  m_SizeDelta: {x: -1679.2, y: -885.078}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &357380603
 MonoBehaviour:
@@ -858,8 +858,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 866.26, y: -399.34}
-  m_SizeDelta: {x: -1732.5, y: -895.99}
+  m_AnchoredPosition: {x: 839.91, y: -378.5586}
+  m_SizeDelta: {x: -1679.8, y: -881.8671}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &967770138
 MonoBehaviour:
@@ -971,7 +971,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1028975414}
   - component: {fileID: 1028975415}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: NavMesh Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1025,37 +1025,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 581a466475013eb478d66573d7269320, type: 2}
   m_BuildHeightMesh: 0
---- !u!1 &1176983203
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1176983204}
-  m_Layer: 0
-  m_Name: Centre of Mass
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1176983204
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176983203}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1340386091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1339,7 +1308,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
@@ -1478,7 +1447,7 @@ GameObject:
   - component: {fileID: 2063557281}
   - component: {fileID: 2063557280}
   - component: {fileID: 2063557279}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1689,10 +1658,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8328371985980118217, guid: 7aec2aff2fb649e4299d00df8a893636, type: 3}
-      propertyPath: centreOfMass
-      value: 
-      objectReference: {fileID: 1176983204}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1750,6 +1715,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7029896425247137314, guid: 9e173542826414844b443e6da146df2d, type: 3}
+      propertyPath: sightBlockers.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1764,6 +1733,5 @@ SceneRoots:
   - {fileID: 1623837974411129074}
   - {fileID: 934444870}
   - {fileID: 43445048}
-  - {fileID: 1176983204}
   - {fileID: 1462413101317707399}
   - {fileID: 2553284516397400511}
