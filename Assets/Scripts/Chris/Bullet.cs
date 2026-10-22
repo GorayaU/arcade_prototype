@@ -1,4 +1,5 @@
 using System.Collections;
+using Udey.Core;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -18,7 +19,12 @@ public class Bullet : MonoBehaviour
         // Ensures the bullet destroys any object with the tag "Enemy"
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Destroy(other.gameObject);
+            IDamageable damageable = other.gameObject.GetComponentInParent<IDamageable>();
+            if (damageable == null || damageable.IsDead)
+            {
+                return;
+            }
+            damageable.TakeDamage(new DamageInfo(bulletDamage, DamageType.Bullet, Vector3.forward, Vector3.forward, gameObject));
         }
     }
 
