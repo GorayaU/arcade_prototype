@@ -145,13 +145,44 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2225587002755811997}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 741f0a493adfbf84a9b9abcc857cb32e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraShake
   cameraTransform: {fileID: 1827148817703609622}
   shakeAmount: 0.02
+--- !u!1 &2283666058607325970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2485219126869779162}
+  m_Layer: 7
+  m_Name: WeaponLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2485219126869779162
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2283666058607325970}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0.795}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7109966126699546370}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3061809362044783072
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,6 +259,7 @@ Transform:
   - {fileID: 7608054601810846868}
   - {fileID: 6419663735333335259}
   - {fileID: 1827148817703609622}
+  - {fileID: 2485219126869779162}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9209243976588989707
@@ -477,8 +509,8 @@ MonoBehaviour:
   mouseSensitivity: 0.2
   gamepadSensitivity: 180
   invertY: 0
-  minPitch: -85
-  maxPitch: 85
+  minPitch: -25
+  maxPitch: 35
   lockCursor: 1
 --- !u!114 &2152125659403251432
 MonoBehaviour:
@@ -498,7 +530,8 @@ MonoBehaviour:
   fireRate: 0.35
   reloadSpeed: 0.8
   weaponDamage: 15
-  maxAmmo: 12
+  clipSize: 12
+  weaponLocation: {fileID: 2485219126869779162}
   switchSpeed: 0.6
   ammoText: {fileID: 0}
   weaponNameText: {fileID: 0}
@@ -515,8 +548,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrentWeapon
   pistolStats: {fileID: 11400000, guid: c0654a16480c20c4ca9af5043b460bff, type: 2}
+  pistolDefinition: {fileID: 11400000, guid: 8808c899ae94fc446abd4605b7b7b1f0, type: 2}
   assaultRifleStats: {fileID: 11400000, guid: 01308d21fffe73f48acb271ac6b45f70, type: 2}
+  rifleDefinition: {fileID: 11400000, guid: 42a81eff60a7e964a8be8651d103c0b7, type: 2}
   shotgunStats: {fileID: 11400000, guid: 8a1403b3ade0a3c409283367d948ef38, type: 2}
+  shotgunDefinition: {fileID: 11400000, guid: 552acd1224e0b454fbdbae3a34625dfe, type: 2}
 --- !u!1 &8702874272494517212
 GameObject:
   m_ObjectHideFlags: 0

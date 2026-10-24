@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90164cc8142ab5f4a8599c48385a8d7d, type: 3}
   m_Name: Stats_Pistol
   m_EditorClassIdentifier: Assembly-CSharp::WeaponStats
+  model: {fileID: 0}
   name: Pistol
   fireRate: 0.35
   reloadSpeed: 0.8
   damage: 15
-  maxAmmo: 12
+  clipSize: 12

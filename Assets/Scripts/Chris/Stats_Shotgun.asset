@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90164cc8142ab5f4a8599c48385a8d7d, type: 3}
   m_Name: Stats_Shotgun
   m_EditorClassIdentifier: Assembly-CSharp::WeaponStats
+  model: {fileID: 0}
   name: Shotgun
   fireRate: 0.8
   reloadSpeed: 1.2
   damage: 4
-  maxAmmo: 6
+  clipSize: 6

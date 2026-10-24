@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90164cc8142ab5f4a8599c48385a8d7d, type: 3}
   m_Name: Stats_Assault_Rifle
   m_EditorClassIdentifier: Assembly-CSharp::WeaponStats
+  model: {fileID: 0}
   name: Assault Rifle
   fireRate: 0.1
   reloadSpeed: 0.4
   damage: 5
-  maxAmmo: 30
+  clipSize: 30

@@ -21,13 +21,23 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] float reloadSpeed = 0.8f;
     bool reloading;
     [SerializeField] float weaponDamage = 15f;
-    [SerializeField] int maxAmmo = 12;
+
+    // Ammo variables
+    [SerializeField] int clipSize = 12;
+    int maxReserveAmmo;
+    int reserveAmmo;
+    int otherReserveAmmo;
     int currentAmmo;
+    int previousAmmo;
     Transform cameraTransform;
 
     // Weapon switching variables
+    [Header("Switching")]
+    [SerializeField] Transform weaponLocation;
     WeaponStats weapon1Data;
+    WeaponDefinition weapon1Definition;
     WeaponStats weapon2Data;
+    WeaponDefinition weapon2Definition;
     [SerializeField] float switchSpeed = 0.6f;
     bool weapon1Equipped;
     bool switching;
@@ -63,13 +73,20 @@ public class PlayerShooting : MonoBehaviour
 
         // Assigning the player's weapons
         weapon1Data = GetComponent<CurrentWeapon>().GetPistolData();
+        weapon1Definition = GetComponent<CurrentWeapon>().GetPistolDefinition();
         weapon2Data = GetComponent<CurrentWeapon>().GetARifleData();
-        SwitchWeapon(weapon1Data);
+        weapon2Definition = GetComponent<CurrentWeapon>().GetRifleDefinition();
+        // Sorting the ammo variables
+        currentAmmo = weapon2Data.clipSize;
+        previousAmmo = weapon1Data.clipSize;
+        reserveAmmo = weapon2Data.clipSize * weapon2Definition.startingSpareMagazines;
+        otherReserveAmmo = weapon1Data.clipSize * weapon1Definition.startingSpareMagazines;
+        SwitchWeapon(weapon1Data, weapon1Definition, currentAmmo, reserveAmmo);
         weapon1Equipped = true;
         switching = false;
 
         // Updating UI information
-        ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
+        ammoText.text = $"Ammo: {currentAmmo}/{reserveAmmo}";
         weaponNameText.text = weaponName;
     }
 
@@ -89,12 +106,12 @@ public class PlayerShooting : MonoBehaviour
         }
 
         // Starts reloading the player's weapon if their ammo isn't full
-        if (reload.WasPerformedThisFrame() && currentAmmo != maxAmmo)
+        if (reload.WasPerformedThisFrame() && currentAmmo != clipSize && reserveAmmo > 0)
         {
             StartCoroutine(ReloadTimer());
         }
 
-        if (switchWeapon.WasPerformedThisFrame())
+        if (switchWeapon.WasPerformedThisFrame() && !switching)
         {
             StartCoroutine(SwitchWeaponDelay());
             switching = true;
@@ -111,21 +128,28 @@ public class PlayerShooting : MonoBehaviour
 
             // Updates the player's ammo
             currentAmmo--;
-            ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
+            ammoText.text = $"Ammo: {currentAmmo}/{reserveAmmo}";
 
             StartCoroutine(CameraShakeTime());
         }
     }
 
-    void SwitchWeapon(WeaponStats newStats)
+    void SwitchWeapon(WeaponStats newStats, WeaponDefinition newDef, int ammo, int reserve)
     {
         weaponName = newStats.name;
         fireRate = newStats.fireRate;
         reloadSpeed = newStats.reloadSpeed;
         weaponDamage = newStats.damage;
-        maxAmmo = newStats.maxAmmo;
+        clipSize = newStats.clipSize;
+
         weaponNameText.text = weaponName;
-        currentAmmo = maxAmmo;
+        maxReserveAmmo = clipSize * newDef.maxSpareMagazines;
+        currentAmmo = previousAmmo;
+        reserveAmmo = otherReserveAmmo;
+
+        // Records the ammo of the weapon held before switching
+        previousAmmo = ammo;
+        otherReserveAmmo = reserve;
     }
 
     IEnumerator ShootWaitTime()
@@ -155,8 +179,31 @@ public class PlayerShooting : MonoBehaviour
     {
         reloading = true;
         yield return new WaitForSeconds(reloadSpeed);
-        currentAmmo = maxAmmo;
-        ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
+
+        if (reserveAmmo >= clipSize)
+        {
+            reserveAmmo -= clipSize - currentAmmo;
+            currentAmmo = clipSize;
+        }
+        else
+        {
+            int currentReserve = reserveAmmo;
+            reserveAmmo -= clipSize - currentAmmo;
+            currentAmmo += currentReserve;
+
+            // Ensures the ammo won't go over the clip size
+            if (currentAmmo > clipSize)
+            {
+                currentAmmo = clipSize;
+            }
+
+            // Ensures the reserve ammo isn't negative
+            if (reserveAmmo < 0)
+            {
+                reserveAmmo = 0;
+            }
+        }
+        ammoText.text = $"Ammo: {currentAmmo}/{reserveAmmo}";
         reloading = false;
     }
 
@@ -169,16 +216,30 @@ public class PlayerShooting : MonoBehaviour
 
         if (weapon1Equipped)
         {
-            SwitchWeapon(weapon2Data);
+            SwitchWeapon(weapon2Data, weapon2Definition, currentAmmo, reserveAmmo);
             weapon1Equipped = false;
         }
         else
         {
-            SwitchWeapon(weapon1Data);
+            SwitchWeapon(weapon1Data, weapon1Definition, currentAmmo, reserveAmmo);
             weapon1Equipped = true;
         }
 
         switching = false;
-        ammoText.text = $"Ammo: {currentAmmo}/{maxAmmo}";
+        ammoText.text = $"Ammo: {currentAmmo}/{reserveAmmo}";
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Will trigger if the object has the "Pickup" layer
+        if (other.gameObject.layer == 10)
+        {
+            reserveAmmo += clipSize;
+            if (reserveAmmo > maxReserveAmmo)
+            {
+                reserveAmmo = maxReserveAmmo;
+            }
+            ammoText.text = $"Ammo: {currentAmmo}/{reserveAmmo}";
+        }
     }
 }
