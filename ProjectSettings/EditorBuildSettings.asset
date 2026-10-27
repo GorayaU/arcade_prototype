@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Test Scenes/Udey/Menu Scenes/Main Menu.unity
     guid: 21400d7b64b653f4ea9f4979391ffaa8
+  - enabled: 1
+    path: Assets/Scenes/Test Scenes/Udey/Udey Test Scene.unity
+    guid: f7ebf5f406c24fb4292b59ca9f02a2d3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
