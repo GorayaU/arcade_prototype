@@ -1,23 +1,20 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Pauses the game and shows the pause UI. Lives in the gameplay scene.
+/// Pauses the game and shows the pause UI. Lives in the gameplay scene, on an object
+/// that stays active — the Canvas is the obvious choice. Never put it on the pause panel
+/// itself: an inactive GameObject doesn't run Update, so it could never un-pause.
 ///
 /// Two things have to happen together, and missing either one is the usual bug:
 ///   - Time.timeScale = 0 freezes movement, enemies and the wave coroutines.
 ///   - The player's scripts get switched off, because Update still runs at timeScale 0.
-///     Without this you shoot straight through the menu while paused.
+///     Without this you shoot through the menu, and MouseLook keeps grabbing the cursor.
 ///
-/// Setup:
-///   1. Put this on the Canvas, with the pause panel assigned to Pause Root (start it inactive).
-///   2. Drag PlayerMovement, MouseLook and WeaponController into Disable While Paused.
-///   3. Buttons: Resume → Resume, Main Menu → ReturnToMainMenu, Exit → QuitGame.
-///
-/// NOTE: MouseLook also listens for Escape to free the cursor. Having it in the
-/// Disable While Paused list is what stops the two fighting over cursor state.
+/// The player scripts are found through PlayerRig, so there is nothing to wire up.
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
@@ -30,8 +27,14 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private MenuNavigator navigator;
 
     [Header("Gameplay")]
-    [Tooltip("Switched off while paused. PlayerMovement, MouseLook, WeaponController.")]
-    [SerializeField] private MonoBehaviour[] disableWhilePaused;
+    [Tooltip("Find PlayerMovement, MouseLook and WeaponController through PlayerRig and " +
+             "switch them off while paused. Leave this on.")]
+    [SerializeField] private bool autoFindPlayerScripts = true;
+
+    [Tooltip("Anything EXTRA to switch off while paused. You don't need the three player " +
+             "scripts here. Never add PlayerInput — the player scripts cache their actions " +
+             "from it, and disabling it pulls the rug out from under them.")]
+    [SerializeField] private List<MonoBehaviour> alsoDisableWhilePaused = new List<MonoBehaviour>();
 
     [Header("Scenes")]
     [SerializeField] private string mainMenuSceneName = "Main Menu";
@@ -41,6 +44,9 @@ public class PauseMenu : MonoBehaviour
 
     /// <summary>Readable from anywhere — useful for gating other systems.</summary>
     public static bool IsPaused { get; private set; }
+
+    /// <summary>Whatever we actually switched off, so Resume turns exactly that back on.</summary>
+    private readonly List<Behaviour> suspended = new List<Behaviour>();
 
     private void Awake()
     {
@@ -84,7 +90,7 @@ public class PauseMenu : MonoBehaviour
         IsPaused = true;
         Time.timeScale = 0f;
 
-        SetGameplayScriptsEnabled(false);
+        SuspendGameplayScripts();
 
         if (pauseRoot != null) pauseRoot.SetActive(true);
         if (navigator != null) navigator.OpenRoot();
@@ -106,9 +112,9 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Re-enable next frame, not now. Resume is usually triggered by Escape, and
-        // MouseLook would see that same key press and immediately free the cursor again.
-        StartCoroutine(EnableGameplayNextFrame());
+        // Restore next frame, not now. Resume is usually triggered by Escape, and MouseLook
+        // would see that same key press and immediately free the cursor again.
+        StartCoroutine(RestoreGameplayNextFrame());
     }
 
     public void TogglePause()
@@ -125,6 +131,7 @@ public class PauseMenu : MonoBehaviour
         // every animation and coroutine in it sits still.
         IsPaused = false;
         Time.timeScale = 1f;
+        suspended.Clear();
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -146,17 +153,53 @@ public class PauseMenu : MonoBehaviour
 
     // ---------------------------------------------------------------- internals
 
-    private IEnumerator EnableGameplayNextFrame()
+    /// <summary>
+    /// Collected fresh on every pause rather than cached in Awake, so a player spawned
+    /// after this script started is still picked up.
+    /// </summary>
+    private void SuspendGameplayScripts()
     {
-        yield return null;
-        SetGameplayScriptsEnabled(true);
+        suspended.Clear();
+
+        if (autoFindPlayerScripts)
+        {
+            PlayerRig rig = PlayerRig.Instance;
+
+            if (rig == null)
+            {
+                Debug.LogWarning("[PauseMenu] No PlayerRig in the scene, so the player's scripts " +
+                                 "can't be switched off. You'll still be able to shoot while paused.", this);
+            }
+            else
+            {
+                Suspend(rig.Movement);
+                Suspend(rig.Weapons);
+                Suspend(rig.GetComponent<MouseLook>());
+            }
+        }
+
+        for (int i = 0; i < alsoDisableWhilePaused.Count; i++) Suspend(alsoDisableWhilePaused[i]);
     }
 
-    private void SetGameplayScriptsEnabled(bool enabled)
+    private void Suspend(Behaviour target)
     {
-        for (int i = 0; i < disableWhilePaused.Length; i++)
+        if (target == null || target == this) return;
+        if (!target.enabled) return;        // already off — leave it off on resume
+        if (suspended.Contains(target)) return;
+
+        target.enabled = false;
+        suspended.Add(target);
+    }
+
+    private IEnumerator RestoreGameplayNextFrame()
+    {
+        yield return null;
+
+        for (int i = 0; i < suspended.Count; i++)
         {
-            if (disableWhilePaused[i] != null) disableWhilePaused[i].enabled = enabled;
+            if (suspended[i] != null) suspended[i].enabled = true;
         }
+
+        suspended.Clear();
     }
 }
