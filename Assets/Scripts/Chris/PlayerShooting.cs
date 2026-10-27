@@ -33,7 +33,7 @@ public class PlayerShooting : MonoBehaviour
 
     // Weapon switching variables
     [Header("Switching")]
-    [SerializeField] Transform weaponLocation;
+    [SerializeField] WeaponLocation weaponLocation;
     WeaponStats weapon1Data;
     WeaponDefinition weapon1Definition;
     WeaponStats weapon2Data;
@@ -74,8 +74,8 @@ public class PlayerShooting : MonoBehaviour
         // Assigning the player's weapons
         weapon1Data = GetComponent<CurrentWeapon>().GetPistolData();
         weapon1Definition = GetComponent<CurrentWeapon>().GetPistolDefinition();
-        weapon2Data = GetComponent<CurrentWeapon>().GetARifleData();
-        weapon2Definition = GetComponent<CurrentWeapon>().GetRifleDefinition();
+        weapon2Data = GetComponent<CurrentWeapon>().GetShotgunData();
+        weapon2Definition = GetComponent<CurrentWeapon>().GetShotgunDefinition();
         // Sorting the ammo variables
         currentAmmo = weapon2Data.clipSize;
         previousAmmo = weapon1Data.clipSize;
@@ -123,7 +123,7 @@ public class PlayerShooting : MonoBehaviour
         if (currentAmmo > 0 && !reloading && !switching)
         {
             // Shoots in the direction of the camera
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            GameObject bullet = Instantiate(bulletPrefab, transform.position, cameraTransform.rotation);
             bullet.GetComponent<Rigidbody>().linearVelocity = cameraTransform.forward * bulletSpeed;
 
             // Updates the player's ammo
@@ -136,6 +136,7 @@ public class PlayerShooting : MonoBehaviour
 
     void SwitchWeapon(WeaponStats newStats, WeaponDefinition newDef, int ammo, int reserve)
     {
+        weaponLocation.WeaponSwitched(newStats.index);
         weaponName = newStats.name;
         fireRate = newStats.fireRate;
         reloadSpeed = newStats.reloadSpeed;

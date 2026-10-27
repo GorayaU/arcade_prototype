@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90164cc8142ab5f4a8599c48385a8d7d, type: 3}
   m_Name: Stats_Pistol
   m_EditorClassIdentifier: Assembly-CSharp::WeaponStats
-  model: {fileID: 0}
+  model: {fileID: 2669081267706206679, guid: 2751c0950ef13ec4ba020e0c85f5be74, type: 3}
+  index: 0
   name: Pistol
   fireRate: 0.35
   reloadSpeed: 0.8

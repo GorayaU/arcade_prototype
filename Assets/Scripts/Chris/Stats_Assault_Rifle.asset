@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Stats_Assault_Rifle
   m_EditorClassIdentifier: Assembly-CSharp::WeaponStats
   model: {fileID: 0}
+  index: 2
   name: Assault Rifle
   fireRate: 0.1
   reloadSpeed: 0.4
