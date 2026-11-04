@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Ensures the bullet destroys any object with the tag "Enemy"
+        // Any object with the tag "Enemy" will take damage depending on the weapon
         if (other.gameObject.CompareTag("Enemy"))
         {
             IDamageable damageable = other.gameObject.GetComponentInParent<IDamageable>();
@@ -25,6 +25,9 @@ public class Bullet : MonoBehaviour
                 return;
             }
             damageable.TakeDamage(new DamageInfo(bulletDamage, DamageType.Bullet, Vector3.forward, Vector3.forward, gameObject));
+
+            StopCoroutine(DestroyBulletAfterSpawn());
+            Destroy(gameObject);
         }
     }
 
