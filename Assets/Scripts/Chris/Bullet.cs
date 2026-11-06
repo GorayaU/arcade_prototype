@@ -5,13 +5,15 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] float bulletLifetime = 2f;
-    float bulletDamage;
+    [SerializeField] float bulletDamage = 15;
 
     void Awake()
     {
-        StartCoroutine(DestroyBulletAfterSpawn());
-        // Retrieve damage stat from the current weapon
+        // Retrieve damage and range stats from the current weapon
         bulletDamage = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShooting>().GetWeaponDamage();
+        bulletLifetime = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShooting>().GetBulletRange();
+
+        StartCoroutine(DestroyBulletAfterSpawn());
     }
 
     void OnTriggerEnter(Collider other)

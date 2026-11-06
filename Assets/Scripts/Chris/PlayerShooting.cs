@@ -21,6 +21,8 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] float reloadSpeed = 0.8f;
     bool reloading;
     [SerializeField] float weaponDamage = 15f;
+    float pelletSpread;
+    float bulletRange;
 
     // Ammo variables
     [SerializeField] int clipSize = 12;
@@ -60,6 +62,11 @@ public class PlayerShooting : MonoBehaviour
     public float GetWeaponDamage()
     {
         return weaponDamage;
+    }
+
+    public float GetBulletRange()
+    {
+        return bulletRange;
     }
 
     void Awake()
@@ -122,9 +129,28 @@ public class PlayerShooting : MonoBehaviour
     {
         if (currentAmmo > 0 && !reloading && !switching)
         {
-            // Shoots in the direction of the camera
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, cameraTransform.rotation);
-            bullet.GetComponent<Rigidbody>().linearVelocity = cameraTransform.forward * bulletSpeed;
+            if (weaponName == "Shotgun")
+            {
+                // Picks a random direction for each pellet to travel
+                Vector3 point = Random.insideUnitCircle * pelletSpread;
+                point.z = 1;
+                Vector3 direction = cameraTransform.rotation * point;
+
+                for (int i = 0; i < 12; i++)
+                {
+                    GameObject bullet = Instantiate(bulletPrefab, transform.position, cameraTransform.rotation);
+                    bullet.GetComponent<Rigidbody>().linearVelocity = direction * bulletSpeed;
+
+                    point = Random.insideUnitCircle * pelletSpread;
+                    point.z = 1;
+                    direction = cameraTransform.rotation * point;
+                }
+            }
+            else
+            {
+                GameObject bullet = Instantiate(bulletPrefab, transform.position, cameraTransform.rotation);
+                bullet.GetComponent<Rigidbody>().linearVelocity = cameraTransform.forward * bulletSpeed;
+            }
 
             // Updates the player's ammo
             currentAmmo--;
@@ -142,6 +168,8 @@ public class PlayerShooting : MonoBehaviour
         reloadSpeed = newStats.reloadSpeed;
         weaponDamage = newStats.damage;
         clipSize = newStats.clipSize;
+        pelletSpread = newStats.spread;
+        bulletRange = newStats.range;
 
         weaponNameText.text = weaponName;
         maxReserveAmmo = clipSize * newDef.maxSpareMagazines;
