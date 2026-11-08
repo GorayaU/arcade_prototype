@@ -20,3 +20,4 @@ MonoBehaviour:
   clipSize: 30
   spread: 0
   range: 2.5
+  attackSound: {fileID: 8300000, guid: 469a2cc47c5c66a40946ba7d3fa2b3b6, type: 3}

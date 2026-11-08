@@ -12,4 +12,5 @@ public class WeaponStats : ScriptableObject
     [Tooltip("Only applies to the shotgun")]
     public float spread;
     public float range;
+    public AudioClip attackSound;
 }

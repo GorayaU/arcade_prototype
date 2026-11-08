@@ -14,6 +14,7 @@ public class PlayerShooting : MonoBehaviour
     // Shooting variables
     [Header("Shooting")]
     [SerializeField] GameObject bulletPrefab;
+    [SerializeField] Transform spawnLocation;
     [SerializeField] float bulletSpeed = 80.0f;
     string weaponName = "Pistol";
     [SerializeField] float fireRate = 0.35f;
@@ -23,6 +24,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] float weaponDamage = 15f;
     float pelletSpread;
     float bulletRange;
+    AudioClip shootSound;
 
     // Ammo variables
     [SerializeField] int clipSize = 12;
@@ -81,8 +83,8 @@ public class PlayerShooting : MonoBehaviour
         // Assigning the player's weapons
         weapon1Data = GetComponent<CurrentWeapon>().GetPistolData();
         weapon1Definition = GetComponent<CurrentWeapon>().GetPistolDefinition();
-        weapon2Data = GetComponent<CurrentWeapon>().GetShotgunData();
-        weapon2Definition = GetComponent<CurrentWeapon>().GetShotgunDefinition();
+        weapon2Data = GetComponent<CurrentWeapon>().GetARifleData();
+        weapon2Definition = GetComponent<CurrentWeapon>().GetRifleDefinition();
         // Sorting the ammo variables
         currentAmmo = weapon2Data.clipSize;
         previousAmmo = weapon1Data.clipSize;
@@ -99,29 +101,32 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
-        // Repeatedly calls the function to shoot after the attack input is performed
-        if (shoot.WasPerformedThisFrame() && !attacking)
+        if (!PauseMenu.IsPaused)
         {
-            InvokeRepeating("ShootProjectile", 0f, fireRate);
-            // Coroutine prevents the player from spamming the shoot input to fire faster
-            StartCoroutine(ShootWaitTime());
-        }
-        // After the attack input is released, the shoot function will stop being called
-        else if (shoot.WasReleasedThisFrame())
-        {
-            CancelInvoke();
-        }
+            // Repeatedly calls the function to shoot after the attack input is performed
+            if (shoot.WasPerformedThisFrame() && !attacking)
+            {
+                InvokeRepeating("ShootProjectile", 0f, fireRate);
+                // Coroutine prevents the player from spamming the shoot input to fire faster
+                StartCoroutine(ShootWaitTime());
+            }
+            // After the attack input is released, the shoot function will stop being called
+            else if (shoot.WasReleasedThisFrame())
+            {
+                CancelInvoke();
+            }
 
-        // Starts reloading the player's weapon if their ammo isn't full
-        if (reload.WasPerformedThisFrame() && currentAmmo != clipSize && reserveAmmo > 0)
-        {
-            StartCoroutine(ReloadTimer());
-        }
+            // Starts reloading the player's weapon if their ammo isn't full
+            if (reload.WasPerformedThisFrame() && currentAmmo != clipSize && reserveAmmo > 0)
+            {
+                StartCoroutine(ReloadTimer());
+            }
 
-        if (switchWeapon.WasPerformedThisFrame() && !switching)
-        {
-            StartCoroutine(SwitchWeaponDelay());
-            switching = true;
+            if (switchWeapon.WasPerformedThisFrame() && !switching)
+            {
+                StartCoroutine(SwitchWeaponDelay());
+                switching = true;
+            }
         }
     }
 
@@ -138,7 +143,7 @@ public class PlayerShooting : MonoBehaviour
 
                 for (int i = 0; i < 12; i++)
                 {
-                    GameObject bullet = Instantiate(bulletPrefab, transform.position, cameraTransform.rotation);
+                    GameObject bullet = Instantiate(bulletPrefab, spawnLocation.position, cameraTransform.rotation);
                     bullet.GetComponent<Rigidbody>().linearVelocity = direction * bulletSpeed;
 
                     point = Random.insideUnitCircle * pelletSpread;
@@ -148,9 +153,12 @@ public class PlayerShooting : MonoBehaviour
             }
             else
             {
-                GameObject bullet = Instantiate(bulletPrefab, transform.position, cameraTransform.rotation);
+                GameObject bullet = Instantiate(bulletPrefab, spawnLocation.position, cameraTransform.rotation);
                 bullet.GetComponent<Rigidbody>().linearVelocity = cameraTransform.forward * bulletSpeed;
             }
+
+            // Plays shooting sound
+            AudioSource.PlayClipAtPoint(shootSound, transform.position);
 
             // Updates the player's ammo
             currentAmmo--;
@@ -170,6 +178,7 @@ public class PlayerShooting : MonoBehaviour
         clipSize = newStats.clipSize;
         pelletSpread = newStats.spread;
         bulletRange = newStats.range;
+        shootSound = newStats.attackSound;
 
         weaponNameText.text = weaponName;
         maxReserveAmmo = clipSize * newDef.maxSpareMagazines;
