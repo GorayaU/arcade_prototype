@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1546012496056181636}
   - component: {fileID: 7029896425247137314}
+  - component: {fileID: 347549702220373480}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -60,7 +61,22 @@ MonoBehaviour:
   avoidPlayerView: 1
   sightBlockers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 512
   placementAttempts: 30
   navMeshSampleRadius: 5
   logWaves: 1
+--- !u!114 &347549702220373480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652100711168190385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c166bc28817b4e9418c6102b9e071ec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
+  waveManager: {fileID: 0}
+  submitOnPlayerDeath: 1
+  logScoring: 0

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3812944961484745358}
   - component: {fileID: -7352527533669805972}
   - component: {fileID: 6037106991168959796}
+  - component: {fileID: 968482325822842328}
   m_Layer: 8
   m_Name: Soldier
   m_TagString: Enemy
@@ -213,5 +214,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onHitLanded:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &968482325822842328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7326959981533814444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc6f7a1662e4454ea3e09bad7f38440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreOnDeath
+  basePoints: 175
+  meleeKillBonus: 1.5
+  onScoreAwarded:
     m_PersistentCalls:
       m_Calls: []

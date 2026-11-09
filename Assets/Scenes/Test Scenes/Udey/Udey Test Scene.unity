@@ -1491,17 +1491,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f59cf51a59701cf409845cdb2c367bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
---- !u!114 &890880659 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2560390021577527627, guid: 7aec2aff2fb649e4299d00df8a893636, type: 3}
-  m_PrefabInstance: {fileID: 1623837974411129074}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
 --- !u!1 &934444866
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,10 +1611,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   pauseRoot: {fileID: 1036287094}
   navigator: {fileID: 0}
-  disableWhilePaused:
-  - {fileID: 890880659}
-  - {fileID: 890880659}
-  - {fileID: 890880659}
+  autoFindPlayerScripts: 1
+  alsoDisableWhilePaused: []
   mainMenuSceneName: Main Menu
   pauseWithEscape: 1
 --- !u!1 &967770136
@@ -2952,10 +2939,6 @@ PrefabInstance:
     - target: {fileID: 1546012496056181636, guid: 9e173542826414844b443e6da146df2d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7029896425247137314, guid: 9e173542826414844b443e6da146df2d, type: 3}
-      propertyPath: sightBlockers.m_Bits
-      value: 512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
