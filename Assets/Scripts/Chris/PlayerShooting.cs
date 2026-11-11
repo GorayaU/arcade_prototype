@@ -83,8 +83,8 @@ public class PlayerShooting : MonoBehaviour
         // Assigning the player's weapons
         weapon1Data = GetComponent<CurrentWeapon>().GetPistolData();
         weapon1Definition = GetComponent<CurrentWeapon>().GetPistolDefinition();
-        weapon2Data = GetComponent<CurrentWeapon>().GetARifleData();
-        weapon2Definition = GetComponent<CurrentWeapon>().GetRifleDefinition();
+        weapon2Data = GetComponent<CurrentWeapon>().GetShotgunData();
+        weapon2Definition = GetComponent<CurrentWeapon>().GetShotgunDefinition();
         // Sorting the ammo variables
         currentAmmo = weapon2Data.clipSize;
         previousAmmo = weapon1Data.clipSize;
