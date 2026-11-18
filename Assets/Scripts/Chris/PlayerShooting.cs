@@ -80,20 +80,10 @@ public class PlayerShooting : MonoBehaviour
         reloading = false;
         cameraTransform = Camera.main.transform;
 
-        // Assigning the player's weapons
+        // Assigning the player's first weapon
         weapon1Data = GetComponent<CurrentWeapon>().GetPistolData();
         weapon1Definition = GetComponent<CurrentWeapon>().GetPistolDefinition();
-        weapon2Data = GetComponent<CurrentWeapon>().GetShotgunData();
-        weapon2Definition = GetComponent<CurrentWeapon>().GetShotgunDefinition();
-        // Sorting the ammo variables
-        currentAmmo = weapon2Data.clipSize;
-        previousAmmo = weapon1Data.clipSize;
-        reserveAmmo = weapon2Data.clipSize * weapon2Definition.startingSpareMagazines;
-        otherReserveAmmo = weapon1Data.clipSize * weapon1Definition.startingSpareMagazines;
-        SwitchWeapon(weapon1Data, weapon1Definition, currentAmmo, reserveAmmo);
-        weapon1Equipped = true;
-        switching = false;
-
+        
         // Updating UI information
         ammoText.text = $"Ammo: {currentAmmo}/{reserveAmmo}";
         weaponNameText.text = weaponName;
@@ -166,6 +156,33 @@ public class PlayerShooting : MonoBehaviour
 
             StartCoroutine(CameraShakeTime());
         }
+    }
+
+    // Sets the player's second weapon depending on the name given
+    public void AssignSecondWeapon(string name)
+    {
+        if (name == "Rifle")
+        {
+            weapon2Data = GetComponent<CurrentWeapon>().GetARifleData();
+            weapon2Definition = GetComponent<CurrentWeapon>().GetRifleDefinition();
+        }
+        else
+        {
+            weapon2Data = GetComponent<CurrentWeapon>().GetShotgunData();
+            weapon2Definition = GetComponent<CurrentWeapon>().GetShotgunDefinition();
+        }
+
+        // Sorting the ammo variables
+        currentAmmo = weapon2Data.clipSize;
+        previousAmmo = weapon1Data.clipSize;
+        reserveAmmo = weapon2Data.clipSize * weapon2Definition.startingSpareMagazines;
+        otherReserveAmmo = weapon1Data.clipSize * weapon1Definition.startingSpareMagazines;
+        SwitchWeapon(weapon1Data, weapon1Definition, currentAmmo, reserveAmmo);
+        weapon1Equipped = true;
+        switching = false;
+
+        ammoText.text = $"Ammo: {currentAmmo}/{reserveAmmo}";
+        weaponNameText.text = weaponName;
     }
 
     void SwitchWeapon(WeaponStats newStats, WeaponDefinition newDef, int ammo, int reserve)
