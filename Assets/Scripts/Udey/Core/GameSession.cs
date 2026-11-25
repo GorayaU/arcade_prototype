@@ -13,7 +13,7 @@ namespace Udey.Core
     /// object to manage and nothing to wire up in the inspector. They reset when you stop
     /// play mode, which is what you want.
     ///
-    /// The menus write to this; WaveManager and friends read from it.
+    /// The menus write to this; WaveManager, ScoreManager and friends read from it.
     /// </summary>
     public static class GameSession
     {
@@ -50,6 +50,12 @@ namespace Udey.Core
                 case 2: return Difficulty.Hard;
                 default: return Difficulty.Medium;
             }
+        }
+
+        /// <summary>"Story", "Easy", "Medium" or "Hard" — for the HUD and leaderboard rows.</summary>
+        public static string Label
+        {
+            get { return Mode == GameMode.Story ? "Story" : Difficulty.ToString(); }
         }
 
         // ---------------------------------------------------------------- tuning hooks
@@ -96,6 +102,24 @@ namespace Udey.Core
                 {
                     case Difficulty.Easy: return 1.35f;
                     case Difficulty.Hard: return 0.8f;
+                    default: return 1f;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Scales every point the player earns. Harder runs are worth more, which is what
+        /// stops the leaderboard from being dominated by Easy.
+        /// </summary>
+        public static float ScoreMultiplier
+        {
+            get
+            {
+                if (Mode == GameMode.Story) return 1f;
+                switch (Difficulty)
+                {
+                    case Difficulty.Easy: return 0.75f;
+                    case Difficulty.Hard: return 1.5f;
                     default: return 1f;
                 }
             }
