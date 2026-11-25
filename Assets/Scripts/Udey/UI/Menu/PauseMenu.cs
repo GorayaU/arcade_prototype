@@ -101,7 +101,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        if (!IsPaused) return;
+        if (!IsPaused || !LoadoutMenu.weaponSelected) return;
 
         IsPaused = false;
         Time.timeScale = 1f;
