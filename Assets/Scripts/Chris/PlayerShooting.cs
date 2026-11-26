@@ -26,6 +26,8 @@ public class PlayerShooting : MonoBehaviour
     float bulletRange;
     AudioClip shootSound;
 
+    PlayerMelee playerMelee;
+
     // Ammo variables
     [SerializeField] int clipSize = 12;
     int maxReserveAmmo;
@@ -71,6 +73,16 @@ public class PlayerShooting : MonoBehaviour
         return bulletRange;
     }
 
+    public bool GetReloading()
+    {
+        return reloading;
+    }
+
+    public bool GetSwitching()
+    {
+        return switching;
+    }
+
     void Awake()
     {
         shoot = InputSystem.actions.FindAction("Attack");
@@ -79,6 +91,7 @@ public class PlayerShooting : MonoBehaviour
         attacking = false;
         reloading = false;
         cameraTransform = Camera.main.transform;
+        playerMelee = GetComponent<PlayerMelee>();
 
         // Assigning the player's first weapon
         weapon1Data = GetComponent<CurrentWeapon>().GetPistolData();
@@ -107,12 +120,12 @@ public class PlayerShooting : MonoBehaviour
             }
 
             // Starts reloading the player's weapon if their ammo isn't full
-            if (reload.WasPerformedThisFrame() && currentAmmo != clipSize && reserveAmmo > 0)
+            if (reload.WasPerformedThisFrame() && currentAmmo != clipSize && reserveAmmo > 0 && !playerMelee.GetIsMeleeAttacking())
             {
                 StartCoroutine(ReloadTimer());
             }
 
-            if (switchWeapon.WasPerformedThisFrame() && !switching)
+            if (switchWeapon.WasPerformedThisFrame() && !switching && !playerMelee.GetIsMeleeAttacking())
             {
                 StartCoroutine(SwitchWeaponDelay());
                 switching = true;
